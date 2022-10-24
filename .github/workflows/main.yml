@@ -14,7 +14,7 @@ jobs:
           spreadsheetId: "1870285624"
           commands: | # list of commands, specified as a valid JSON string
             [
-              { "command": "getData", "args": { "worksheetTitle": "202209" }}
+              { "command": "getData", "args": { "worksheetTitle": "202209"}},
               { "command": "getData", "args": { "minCol": 1 } },
               { "command": "getData", "args": { "range": "'202209'!B102:G103" } }
             ]
