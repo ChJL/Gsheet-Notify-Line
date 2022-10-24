@@ -14,7 +14,7 @@ jobs:
           spreadsheetId: ${{ secrets.TEST_SPREADSHEET_ID }}
           commands: | # list of commands, specified as a valid JSON string
             [
-              { "command": "getData", "args": { "range": "'202209'!B102:F103" }}
+              { "command": "getData", "args": { "range": "'202209'!B97:F99" }}
             ]
         env:
           GSHEET_CLIENT_EMAIL: ${{ secrets.GSHEET_CLIENT_EMAIL }}
