@@ -14,7 +14,7 @@ jobs:
           spreadsheetId: ${{ secrets.TEST_SPREADSHEET_ID }}
           commands: | # list of commands, specified as a valid JSON string
             [
-              { "command": "getWorksheet", "args": { "worksheetTitle": "202209" } },
+              { "command": "getWorksheet", "args": { "worksheetTitle": "workingon" } },
               { "command": "getData", "args": { "minCol": 1 } }
             ]
         env:
