@@ -28,9 +28,9 @@ jobs:
           echo "$RESULTS" > result.json
           ls -a
       - name: Checkout Repo
-      - uses: actions/checkout@v3
+        uses: actions/checkout@v3
       - name: Run Python
-      - uses: actions/setup-python@v4
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
           cache: 'pip' # caching pip dependencies
