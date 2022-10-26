@@ -1,8 +1,10 @@
-name: gsheet.action test
+name: Weekly Expense Notification
 on: 
   push:
     branches:
       - 'main'
+  schedule:
+    - cron: "15 22 * * 2"
 
 jobs:
   fetch:
@@ -53,9 +55,4 @@ jobs:
         uses: louis70109/line-notify-action@master
         with:
           token: ${{ secrets.LINE_NOTIFY_TOKEN }}
-          message: 'Notify: ${{needs.fetch.outputs.msgoutput}} OR ${{steps.msg.outputs.var}}'
-      - name: Check env
-        run: |
-          echo $var
-          echo $GITHUB_OUTPUT
-          ls -a
+          message: '${{steps.msg.outputs.var}}'
