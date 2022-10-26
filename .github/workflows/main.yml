@@ -8,6 +8,9 @@ jobs:
   fetch:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        
       - id: 'update_worksheet'
         uses: jroehl/gsheet.action@v1.0.0 # you can specify '@release' to always have the latest changes
         with:
@@ -29,9 +32,6 @@ jobs:
           echo "$RESULTS" > result.json
           ls -a
       
-      - name: Checkout Repo
-        uses: actions/checkout@v3
-      
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -42,7 +42,7 @@ jobs:
         run: |
           pip install -r requirements.txt
           python WeekSum.py
-          
+
       - name: Store message in variable var
         run: |
           var=$(cat message.txt)
