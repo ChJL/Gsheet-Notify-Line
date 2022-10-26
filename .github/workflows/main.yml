@@ -47,8 +47,7 @@ jobs:
       - id: msg
         name: Store message in variable var
         run: |
-          var=$(cat message.txt)
-          echo $var >> $GITHUB_OUTPUT
+          echo "var=$(cat message.txt)" >> $GITHUB_OUTPUT
 
       - name: send notify message
         uses: louis70109/line-notify-action@master
