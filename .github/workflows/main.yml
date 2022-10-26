@@ -7,6 +7,8 @@ on:
 jobs:
   fetch:
     runs-on: ubuntu-latest
+    outputs:
+      msgoutput: ${{ steps.msg.outputs.var }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
@@ -42,14 +44,14 @@ jobs:
         run: |
           pip install -r requirements.txt
           python WeekSum.py
-
-      - name: Store message in variable var
+      - id: msg
+        name: Store message in variable var
         run: |
           var=$(cat message.txt)
-          echo $var
+          echo $var >> $GITHUB_OUTPUT
 
       - name: send notify message
         uses: louis70109/line-notify-action@master
         with:
           token: ${{ secrets.LINE_NOTIFY_TOKEN }}
-          message: 'Notify: ${var}'
+          message: 'Notify: ${{needs.fetch.outputs.msgoutput}}'
