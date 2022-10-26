@@ -54,6 +54,8 @@ jobs:
         with:
           token: ${{ secrets.LINE_NOTIFY_TOKEN }}
           message: 'Notify: ${{needs.fetch.outputs.msgoutput}} OR ${{steps.msg.outputs.var}}'
+      - name: Check env
         run: |
           echo $var
           echo $GITHUB_OUTPUT
+          ls -a
