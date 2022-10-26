@@ -4,7 +4,7 @@ on:
     branches:
       - 'main'
   schedule:
-    - cron: "25 22 * * 3"
+    - cron: "40 20 * * 3"
 
 jobs:
   fetch:
