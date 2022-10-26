@@ -3,7 +3,8 @@ import json
 from datetime import datetime as dt
 from datetime import timedelta
 
-# Opening JSON file
+# Opening JSON file, using 'test_json/result.json' for local development
+# using 'result.json' for pushing to Gihub Repo (Github Actions)
 f = open('result.json')
 # returns JSON object as a dictionary
 data = json.load(f)
@@ -31,10 +32,11 @@ df_b = df_a[df_a['T_Date'] <= end_date]
 
 # The sum of expense in last week
 week_expense = df_b['Amount'].sum()
-
+week_expense = "{:.2f}".format(week_expense
+	)
 # string for output
-start_date_str = start_date.strftime("%Y/%m/%d")
-end_date_str = end_date.strftime("%Y/%m/%d")
+start_date_str = start_date.strftime("%m/%d")
+end_date_str = end_date.strftime("%m/%d")
 sum_str = str(week_expense)
 
 # test for print
@@ -44,6 +46,7 @@ print(end_date_str)
 
 # save the message in txt file
 txt_file = open('message.txt',"w")
-txt_file.write('Last week expense: €' + sum_str +' from '+ \
-	start_date_str+' to '+ end_date_str)
+message_totxt = 'Last week: €' + sum_str +' from '+ \
+	start_date_str+' to '+ end_date_str
+txt_file.write(message_totxt)
 txt_file.close()
