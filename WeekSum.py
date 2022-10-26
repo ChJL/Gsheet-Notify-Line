@@ -19,7 +19,7 @@ df['Amount'] = df['Amount'].astype(float)
 
 # Setting Time period
 start_date = dt.today() - timedelta(days=7)
-end_date = dt.today()
+end_date = dt.today() - timedelta(days=1)
 
 # Set time period exact to 00:00:00
 start_date = start_date.replace(hour=0,minute=0,second=0, microsecond=0)

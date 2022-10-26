@@ -4,7 +4,7 @@ on:
     branches:
       - 'main'
   schedule:
-    - cron: "40 20 * * 3"
+    - cron: "30 8 * * 1"
 
 jobs:
   fetch:
@@ -34,8 +34,7 @@ jobs:
           RESULTS: ${{ steps.update_worksheet.outputs.results }}
         run: |
           echo "$RESULTS" > result.json
-          ls -a
-      
+
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
