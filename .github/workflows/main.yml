@@ -37,3 +37,7 @@ jobs:
       - run: |
           pip install -r requirements.txt
           python WeekSum.py
+      - name: Store message in variable var
+      - run: |
+          var=$(cat message.txt)
+          echo $var

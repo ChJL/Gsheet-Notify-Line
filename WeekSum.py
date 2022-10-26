@@ -41,3 +41,9 @@ sum_str = str(week_expense)
 print(sum_str)
 print(start_date_str)
 print(end_date_str)
+
+# save the message in txt file
+txt_file = open('message.txt',"w")
+txt_file.write('Last week expense: €' + sum_str +'\n from '+ \
+	start_date_str+' to '+ end_date_str)
+txt_file.close()
