@@ -55,3 +55,4 @@ jobs:
         with:
           token: ${{ secrets.LINE_NOTIFY_TOKEN }}
           message: '${{steps.msg.outputs.var}}'
+          image_file: figure/CategoryPlot.jpg
