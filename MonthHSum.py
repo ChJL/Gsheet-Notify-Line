@@ -26,7 +26,6 @@ data = json.load(f)
 colname = ['Timestamp', 'Date', 'Category','Who','Payment','Amount', 'Remark'] 
 list_result = data['results'][1]['result']['rawData']
 df = pd.DataFrame(list_result, columns =colname)
-print(df.head())
 
 # transform date type
 df['T_Date'] = df['Date'].apply(lambda x: dt.strptime(x, '%m/%d/%Y'))
