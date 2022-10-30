@@ -1,11 +1,8 @@
-name: Monthly Expense Notification
+name: Test Gsheet json
 on: 
   push:
     branches:
       - 'main'
-  schedule:
-    - cron: "30 6 1 * *"
-
 jobs:
   fetch:
     runs-on: ubuntu-latest
@@ -22,7 +19,7 @@ jobs:
           commands: | # list of commands, specified as a valid JSON string
             [
               { "command": "getWorksheet", "args": { "worksheetTitle": "workingon" } },
-              { "command": "getData", "args": { "minCol": 1 } }
+              { "command": "getData", "args": { "minRow": 66 } }
             ]
         env:
           GSHEET_CLIENT_EMAIL: ${{ secrets.GSHEET_CLIENT_EMAIL }}
@@ -34,25 +31,3 @@ jobs:
           RESULTS: ${{ steps.update_worksheet.outputs.results }}
         run: |
           echo "$RESULTS" > result.json
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-          cache: 'pip' # caching pip dependencies
-      
-      - name: Run python
-        run: |
-          pip install -r requirements.txt
-          python MonthSum.py
-      - id: 'msg'
-        name: Store message in variable var
-        run: |
-          echo "var=$(cat message.txt)" >> $GITHUB_OUTPUT
-
-      - name: send notify message
-        uses: louis70109/line-notify-action@master
-        with:
-          token: ${{ secrets.LINE_NOTIFY_TOKEN }}
-          message: '${{steps.msg.outputs.var}}'
-          image_file: figure/CatMonthPlot.jpg

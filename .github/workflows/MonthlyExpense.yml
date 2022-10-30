@@ -1,0 +1,58 @@
+name: Monthly Expense Notification
+on: 
+  # push:
+  #   branches:
+  #     - 'main'
+  schedule:
+    - cron: "30 6 1 * *"
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    outputs:
+      msgoutput: ${{ steps.msg.outputs.var }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - id: 'update_worksheet'
+        uses: jroehl/gsheet.action@v1.0.0 # you can specify '@release' to always have the latest changes
+        with:
+          spreadsheetId: ${{ secrets.TEST_SPREADSHEET_ID }}
+          commands: | # list of commands, specified as a valid JSON string
+            [
+              { "command": "getWorksheet", "args": { "worksheetTitle": "workingon" } },
+              { "command": "getData", "args": { "minCol": 1 } }
+            ]
+        env:
+          GSHEET_CLIENT_EMAIL: ${{ secrets.GSHEET_CLIENT_EMAIL }}
+          GSHEET_PRIVATE_KEY: ${{ secrets.GSHEET_PRIVATE_KEY }}
+      
+      - name: dump results
+        env:
+          #  the output of the action can be found in ${{ steps.update_worksheet.outputs.results }}
+          RESULTS: ${{ steps.update_worksheet.outputs.results }}
+        run: |
+          echo "$RESULTS" > result.json
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip' # caching pip dependencies
+      
+      - name: Run python
+        run: |
+          pip install -r requirements.txt
+          python MonthSum.py
+      - id: 'msg'
+        name: Store message in variable var
+        run: |
+          echo "var=$(cat message.txt)" >> $GITHUB_OUTPUT
+
+      - name: send notify message
+        uses: louis70109/line-notify-action@master
+        with:
+          token: ${{ secrets.LINE_NOTIFY_TOKEN }}
+          message: '${{steps.msg.outputs.var}}'
+          image_file: figure/CatMonthPlot.jpg
