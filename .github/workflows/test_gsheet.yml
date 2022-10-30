@@ -12,14 +12,14 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
-      - id: 'update_worksheet'
+      - id: 'access_worksheet'
         uses: jroehl/gsheet.action@v1.0.0 # you can specify '@release' to always have the latest changes
         with:
-          spreadsheetId: ${{ secrets.TEST_SPREADSHEET_ID }}
+          spreadsheetId: ${{ secrets.H_SPREADSHEET_ID }}
           commands: | # list of commands, specified as a valid JSON string
             [
-              { "command": "getWorksheet", "args": { "worksheetTitle": "workingon" } },
-              { "command": "getData", "args": { "minRow": 66 , "minCol": 1 } }
+              { "command": "getWorksheet", "args": { "worksheetTitle": "result" } },
+              { "command": "getData", "args": { "minRow": 1202 , "minCol": 1 } }
             ]
         env:
           GSHEET_CLIENT_EMAIL: ${{ secrets.GSHEET_CLIENT_EMAIL }}
@@ -28,6 +28,6 @@ jobs:
       - name: dump results
         env:
           #  the output of the action can be found in ${{ steps.update_worksheet.outputs.results }}
-          RESULTS: ${{ steps.update_worksheet.outputs.results }}
+          RESULTS: ${{ steps.access_worksheet.outputs.results }}
         run: |
           echo "$RESULTS" > result.json
