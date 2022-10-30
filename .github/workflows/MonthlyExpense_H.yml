@@ -1,8 +1,10 @@
-name: Test Gsheet json
+name: Group Month Expense
 on: 
   push:
     branches:
       - 'main'
+  schedule:
+    - cron: "10 0 1 * *"
 jobs:
   fetch:
     runs-on: ubuntu-latest
@@ -31,3 +33,26 @@ jobs:
           RESULTS: ${{ steps.access_worksheet.outputs.results }}
         run: |
           echo "$RESULTS" > result.json
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip' # caching pip dependencies
+      
+      - name: Run python
+        run: |
+          pip install -r requirements.txt
+          python MonthHSum.py
+          
+      - id: 'msg'
+        name: Store message in variable var
+        run: |
+          echo "var=$(cat message.txt)" >> $GITHUB_OUTPUT
+
+      - name: send notify message
+        uses: louis70109/line-notify-action@master
+        with:
+          token: ${{ secrets.LINE_GROUP_TOKEN }}
+          message: '${{steps.msg.outputs.var}}'
+          image_file: figure/Cat_HMonthPlot.jpg
