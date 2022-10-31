@@ -55,6 +55,10 @@ jobs:
         with:
           token: ${{ secrets.LINE_NOTIFY_TOKEN }}
           message: '${{steps.msg.outputs.var}}'
-          image_file: |
-            figure/CatMonthPlot.jpg
-            figure/LinePlot.jpg
+          image_file: figure/CatMonthPlot.jpg
+      
+      - name: send line plot message
+        uses: louis70109/line-notify-action@master
+        with:
+          token: ${{ secrets.LINE_NOTIFY_TOKEN }}
+          image_file: figure/LinePlot.jpg
