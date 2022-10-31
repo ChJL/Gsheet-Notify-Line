@@ -55,5 +55,6 @@ jobs:
         with:
           token: ${{ secrets.LINE_NOTIFY_TOKEN }}
           message: '${{steps.msg.outputs.var}}'
-          image_file: figure/CatMonthPlot.jpg
-          image_file: figure/LinePlot.jpg
+          image_file: |
+            figure/CatMonthPlot.jpg
+            figure/LinePlot.jpg
