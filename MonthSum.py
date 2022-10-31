@@ -4,6 +4,7 @@ from datetime import datetime as dt
 from datetime import timedelta
 import calendar
 import matplotlib.pyplot as plt
+from util.plots import pie_plot, line_plot
 
 def pre_month(sourcedate):
     year = sourcedate.year if sourcedate.month !=1 else sourcedate.year - 1
@@ -36,10 +37,10 @@ end_date = end_date.replace(hour=0,minute=0,second=0, microsecond=0)
 
 # filter df for time period (last 1 week)
 df_a = df[df['T_Date'] >= start_date]
-df_b = df_a[df_a['T_Date'] <= end_date]
+interval_df = df_a[df_a['T_Date'] <= end_date]
 
 # The sum of expense in last week
-week_expense = df_b['Amount'].sum()
+week_expense = interval_df['Amount'].sum()
 week_expense = "{:.2f}".format(week_expense)
 
 # string for output
@@ -57,41 +58,16 @@ message_totxt = 'Last Month: €' + sum_str +' from '+ \
 txt_file.write(message_totxt)
 txt_file.close()
 print(message_totxt)
-# ===== To Draw plot =====
 
 # Groupby Category & Sum the amount, Sorted it in decending way
-cate_df = df_b[['Amount','Category']].groupby(by=['Category'],as_index=False).sum()
+cate_df = interval_df[['Amount','Category']].groupby(by=['Category'],as_index=False).sum()
 cate_df = cate_df.sort_values(by=['Amount'], ascending=False, ignore_index=True)
 
-# make the explode difference by percentage
-myexplode = [0]*len(cate_df)
-
-# ===== Pie Plot ======
-plt.figure(figsize=(12, 8))
-plt.pie(cate_df.Amount,                           # Value
-        labels = list(cate_df.Category),          # Labels
-        autopct = "%1.1f%%",                      # precision
-        # explode = myexplode,                      # explode way (list of float)
-        pctdistance = 0.8,                        # distance betweeen num and center
-        textprops = {"fontsize" : 15},            # fontsize
-        shadow=False,                              # shadow
-        radius = 1.2)                             # radius long
-
-# draw white circle in the pie 
-centre_circle = plt.Circle((0, 0), 0.8, fc='white')
-fig = plt.gcf()
-
-# Adding Circle in Pie chart
-fig.gca().add_artist(centre_circle)
-
-# Setting title and fontsize
-plt.title("Category Donut Plot - \n TOTAL: €"+ str(sum(cate_df.Amount))[0:6]+ \
-          "\n " + start_date_str +" to " +end_date_str,\
-          {"fontsize" : 15}, x=1.3,y=1)
-# Legend position, content values & position
-plt.legend(bbox_to_anchor=(1.2, 0.4), loc="upper left",fontsize=14,
-          labels=['%s , %1.0f' % (l, (float(s))) for l, s in zip(list(cate_df.Category), list(cate_df.Amount))],)
-
-plt.tight_layout()
-plt.savefig("figure/CatMonthPlot.jpg", dpi=200)
-# plt.show()
+# Groupby day & sum the amount (for line plot)
+fordaydf = interval_df[interval_df.Category != "Insurance"]
+fordaydf = fordaydf[fordaydf.Category != "Transportation"]
+fordaydf = fordaydf[fordaydf.Category != "Rental"]
+day_df = fordaydf[['Amount', 'T_Date']].groupby(by=['T_Date'], as_index=True).sum()
+# ===== To Draw plot =====
+pie_plot(cate_df, start_date_str, end_date_str)
+line_plot(day_df, start_date, end_date)
