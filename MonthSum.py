@@ -6,7 +6,7 @@ import calendar
 import matplotlib.pyplot as plt
 from util.plots import pie_plot, line_plot
 
-def pre_month(sourcedate):
+def pre_month(sourcedate: dt) -> dt :
     year = sourcedate.year if sourcedate.month !=1 else sourcedate.year - 1
     month = sourcedate.month - 1 if sourcedate.month > 1 else 12
     day = min(sourcedate.day, calendar.monthrange(year,month)[1])
@@ -40,13 +40,13 @@ df_a = df[df['T_Date'] >= start_date]
 interval_df = df_a[df_a['T_Date'] <= end_date]
 
 # The sum of expense in last week
-week_expense = interval_df['Amount'].sum()
-week_expense = "{:.2f}".format(week_expense)
+month_expense = interval_df['Amount'].sum()
+month_expense = "{:.2f}".format(month_expense)
 
 # string for output
 start_date_str = start_date.strftime("%m/%d")
 end_date_str = end_date.strftime("%m/%d")
-sum_str = str(week_expense)
+sum_str = str(month_expense)
 
 # test for print
 print("Total Expense: €" + sum_str)
