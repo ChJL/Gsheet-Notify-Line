@@ -3,6 +3,7 @@ on:
   # push:
   #   branches:
   #     - 'main'
+      # for retrigger
   schedule:
     - cron: "10 0 1 * *"
 jobs:
