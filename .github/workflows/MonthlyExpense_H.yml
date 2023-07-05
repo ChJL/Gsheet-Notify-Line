@@ -1,8 +1,8 @@
 name: Group Month Expense
 on: 
-  # push:
-  #   branches:
-  #     - 'main'
+  push:
+    branches:
+      - 'main'
       # for retrigger
   schedule:
     - cron: "10 0 1 * *"

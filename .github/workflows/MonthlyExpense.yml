@@ -1,8 +1,8 @@
 name: Monthly Expense Notification
 on: 
   push:
-    branches:
-      - 'main'
+    # branches:
+    #   - 'main'
       # for re-trigger
   schedule:
     - cron: "30 6 1 * *"
