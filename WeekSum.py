@@ -11,7 +11,8 @@ f = open('result.json')
 data = json.load(f)
 
 # To transform json into dataframe
-colname =  data['results'][1]['result']['rawData'][0]
+# colname =  data['results'][1]['result']['rawData'][0]
+colname = ['Timestamp', 'Date', 'Category','Payment','Amount', 'Remarks'] 
 list_result = data['results'][1]['result']['rawData']
 df = pd.DataFrame(list_result[1:], columns =colname)
 
