@@ -23,7 +23,7 @@ jobs:
           commands: | # list of commands, specified as a valid JSON string
             [
               { "command": "getWorksheet", "args": { "worksheetTitle": "workingon" } },
-              { "command": "getData", "args": { "minCol": 1 } }
+              { "command": "getData", "args": { "minCol": 1 , "minRow": 598  } }
             ]
         env:
           GSHEET_CLIENT_EMAIL: ${{ secrets.GSHEET_CLIENT_EMAIL }}
