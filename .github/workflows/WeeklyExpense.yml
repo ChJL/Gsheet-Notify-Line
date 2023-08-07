@@ -1,8 +1,8 @@
 name: Weekly Expense Notification
 on: 
-  # push:
-  #   branches:
-  #     - 'main'
+  push:
+    branches:
+      - 'main'
   schedule:
     - cron: "30 6 * * 1"
 
@@ -22,7 +22,7 @@ jobs:
           commands: | # list of commands, specified as a valid JSON string
             [
               { "command": "getWorksheet", "args": { "worksheetTitle": "workingon" } },
-              { "command": "getData", "args": { "minCol": 1 } }
+              { "command": "getData", "args": { "minCol": 1 , "minRow": 598 } }
             ]
         env:
           GSHEET_CLIENT_EMAIL: ${{ secrets.GSHEET_CLIENT_EMAIL }}
