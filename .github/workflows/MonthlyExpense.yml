@@ -20,10 +20,10 @@ jobs:
         uses: jroehl/gsheet.action@v1.0.0 # you can specify '@release' to always have the latest changes
         with:
           spreadsheetId: ${{ secrets.TEST_SPREADSHEET_ID }}
-          commands: | # list of commands, specified as a valid JSON string
+          commands: | # list of commands, specified as a valid JSON string, set lower bound of row 
             [
               { "command": "getWorksheet", "args": { "worksheetTitle": "workingon" } },
-              { "command": "getData", "args": { "minCol": 1 , "minRow": 598  } }
+              { "command": "getData", "args": { "minCol": 1 , "minRow": 1200  } }
             ]
         env:
           GSHEET_CLIENT_EMAIL: ${{ secrets.GSHEET_CLIENT_EMAIL }}
