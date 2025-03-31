@@ -1,0 +1,25 @@
+name: Send Message via LINE Official Account
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 9 * * *'  # 每天 UTC 9:00 執行（台灣時間 17:00）
+
+jobs:
+  send_message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Message via LINE API
+        run: |
+          curl -X POST https://api.line.me/v2/bot/message/push \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.CH_NOTIFY_BOT_TOKEN }}" \
+            -d '{
+              "to": "${{ secrets.CH_NOTIFY_BOT_USER_ID }}",
+              "messages": [
+                {
+                  "type": "text",
+                  "text": "Hello from GitHub Actions! 🎉 這是自動發送的訊息"
+                }
+              ]
+            }'
