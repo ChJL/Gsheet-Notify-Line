@@ -1,9 +1,9 @@
 name: Group Monthly Send Expense
 
 on:
-  push:
-    branches:
-      - F-migrate-to-messaging-api
+  # push:
+  #   branches:
+  #     - F-migrate-to-messaging-api
   schedule:
     - cron: "10 0 1 * *" # “At 01:10 on day-of-month 1.”
 
