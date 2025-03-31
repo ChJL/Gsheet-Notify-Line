@@ -1,15 +1,63 @@
 name: Group Monthly Send Expense
 
 on:
-  # push:
-  #   branches:
-  #     - F-migrate-to-messaging-api
   schedule:
     - cron: "10 0 1 * *" # “At 01:10 on day-of-month 1.”
 
 jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    outputs:
+      msgoutput: ${{ steps.msg.outputs.var }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - id: 'access_worksheet'
+        uses: jroehl/gsheet.action@v1.0.0 # you can specify '@release' to always have the latest changes
+        with:
+          spreadsheetId: ${{ secrets.H_SPREADSHEET_ID }}
+          commands: | # list of commands, specified as a valid JSON string
+            [
+              { "command": "getWorksheet", "args": { "worksheetTitle": "result" } },
+              { "command": "getData", "args": { "minRow": 2200 , "minCol": 1 } }
+            ]
+        env:
+          GSHEET_CLIENT_EMAIL: ${{ secrets.GSHEET_CLIENT_EMAIL }}
+          GSHEET_PRIVATE_KEY: ${{ secrets.GSHEET_PRIVATE_KEY }}
+      
+      - name: dump results
+        env:
+          #  the output of the action can be found in ${{ steps.update_worksheet.outputs.results }}
+          RESULTS: ${{ steps.access_worksheet.outputs.results }}
+        run: |
+          echo "$RESULTS" > result.json
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip' # caching pip dependencies
+      
+      - name: Run python
+        run: |
+          pip install -r requirements.txt
+          python MonthHSum.py
+          
+      - id: 'msg'
+        name: Store message in variable var
+        run: |
+          echo "var=$(cat message.txt)" >> $GITHUB_OUTPUT
+
+      # - name: send notify message
+      #   uses: louis70109/line-notify-action@master
+      #   with:
+      #     token: ${{ secrets.LINE_GROUP_TOKEN }}
+      #     message: '${{steps.msg.outputs.var}}'
+      #     image_file: figure/Cat_HMonthPlot.jpg
   send_message:
     runs-on: ubuntu-latest
+    needs: fetch
     steps:
       - name: Send Message via LINE API
         run: |
@@ -21,7 +69,7 @@ jobs:
               "messages": [
                 {
                   "type": "text",
-                  "text": "Hello from GitHub Actions! 🎉 這是群組自動測試發送的訊息"
+                  "text": "${{ needs.fetch.outputs.msgoutput }}"
                 }
               ]
             }'
