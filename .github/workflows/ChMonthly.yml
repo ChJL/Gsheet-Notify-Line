@@ -1,9 +1,9 @@
-name: Send Message to Ch
+name: Ch Monthly Send Expense
 
 on:
-  push:
-    branches:
-      - F-migrate-to-messaging-api
+  # push:
+  #   branches:
+  #     - F-migrate-to-messaging-api
   schedule:
     - cron: "30 6 1 * *"  # “At 06:30 on day-of-month 1.”
 
