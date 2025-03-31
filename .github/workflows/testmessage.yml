@@ -1,7 +1,9 @@
 name: Send Message via LINE Official Account
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - F-migrate-to-messaging-api
   schedule:
     - cron: '0 9 * * *'  # 每天 UTC 9:00 執行（台灣時間 17:00）
 
