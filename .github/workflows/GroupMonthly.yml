@@ -1,0 +1,27 @@
+name: Send Message to Ch
+
+on:
+  push:
+    branches:
+      - F-migrate-to-messaging-api
+  schedule:
+    - cron: "10 0 1 * *" # “At 01:10 on day-of-month 1.”
+
+jobs:
+  send_message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Message via LINE API
+        run: |
+          curl -X POST https://api.line.me/v2/bot/message/push \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.CH_NOTIFY_BOT_TOKEN }}" \
+            -d '{
+              "to": "${{ secrets.LINE_GROUP_TOKEN }}",
+              "messages": [
+                {
+                  "type": "text",
+                  "text": "Hello from GitHub Actions! 🎉 這是自動測試發送的訊息"
+                }
+              ]
+            }'
