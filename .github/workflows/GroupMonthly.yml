@@ -1,11 +1,9 @@
-name: Group Month Expense
-on: 
-  push:
-    branches:
-      # - 'main'
-      # for retrigger
+name: Group Monthly Send Expense
+
+on:
   schedule:
-    - cron: "10 0 1 * *"
+    - cron: "10 0 1 * *" # “At 01:10 on day-of-month 1.”
+
 jobs:
   fetch:
     runs-on: ubuntu-latest
@@ -51,9 +49,27 @@ jobs:
         run: |
           echo "var=$(cat message.txt)" >> $GITHUB_OUTPUT
 
-      - name: send notify message
-        uses: louis70109/line-notify-action@master
-        with:
-          token: ${{ secrets.LINE_GROUP_TOKEN }}
-          message: '${{steps.msg.outputs.var}}'
-          image_file: figure/Cat_HMonthPlot.jpg
+      # - name: send notify message
+      #   uses: louis70109/line-notify-action@master
+      #   with:
+      #     token: ${{ secrets.LINE_GROUP_TOKEN }}
+      #     message: '${{steps.msg.outputs.var}}'
+      #     image_file: figure/Cat_HMonthPlot.jpg
+  send_message:
+    runs-on: ubuntu-latest
+    needs: fetch
+    steps:
+      - name: Send Message via LINE API
+        run: |
+          curl -X POST https://api.line.me/v2/bot/message/push \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.CH_NOTIFY_BOT_TOKEN }}" \
+            -d '{
+              "to": "${{ secrets.GROUP_ID }}",
+              "messages": [
+                {
+                  "type": "text",
+                  "text": "${{ needs.fetch.outputs.msgoutput }}"
+                }
+              ]
+            }'

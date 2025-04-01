@@ -1,0 +1,81 @@
+name: Ch Monthly Send Expense
+
+on:
+  schedule:
+    - cron: "30 6 1 * *"  # “At 06:30 on day-of-month 1.”
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    outputs:
+      msgoutput: ${{ steps.msg.outputs.var }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - id: 'update_worksheet'
+        uses: jroehl/gsheet.action@v1.0.0 # you can specify '@release' to always have the latest changes
+        with:
+          spreadsheetId: ${{ secrets.TEST_SPREADSHEET_ID }}
+          commands: | # list of commands, specified as a valid JSON string, set lower bound of row 
+            [
+              { "command": "getWorksheet", "args": { "worksheetTitle": "workingon" } },
+              { "command": "getData", "args": { "minCol": 1 , "minRow": 1600  } }
+            ]
+        env:
+          GSHEET_CLIENT_EMAIL: ${{ secrets.GSHEET_CLIENT_EMAIL }}
+          GSHEET_PRIVATE_KEY: ${{ secrets.GSHEET_PRIVATE_KEY }}
+      
+      - name: dump results
+        env:
+          #  the output of the action can be found in ${{ steps.update_worksheet.outputs.results }}
+          RESULTS: ${{ steps.update_worksheet.outputs.results }}
+        run: |
+          echo "$RESULTS" > result.json
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip' # caching pip dependencies
+      
+      - name: Run python
+        run: |
+          pip install -r requirements.txt
+          python MonthSum.py
+      - id: 'msg'
+        name: Store message in variable var
+        run: |
+          echo "var=$(cat message.txt)" >> $GITHUB_OUTPUT
+
+      # - name: send notify message
+      #   uses: louis70109/line-notify-action@master
+      #   with:
+      #     token: ${{ secrets.LINE_NOTIFY_TOKEN }}
+      #     message: '${{steps.msg.outputs.var}}'
+      #     image_file: figure/CatMonthPlot.jpg
+      
+      # - name: send line plot message
+      #   uses: louis70109/line-notify-action@master
+      #   with:
+      #     token: ${{ secrets.LINE_NOTIFY_TOKEN }}
+      #     message: 'The line plot for last month:'
+      #     image_file: figure/LinePlot.jpg
+  send_message:
+    runs-on: ubuntu-latest
+    needs: fetch
+    steps:
+      - name: Send Message via LINE API
+        run: |
+          curl -X POST https://api.line.me/v2/bot/message/push \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.CH_NOTIFY_BOT_TOKEN }}" \
+            -d '{
+              "to": "${{ secrets.CH_NOTIFY_BOT_USER_ID }}",
+              "messages": [
+                {
+                  "type": "text",
+                  "text": "${{ needs.fetch.outputs.msgoutput }}"
+                }
+              ]
+            }'
