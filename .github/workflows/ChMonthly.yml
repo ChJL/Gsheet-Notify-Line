@@ -6,7 +6,7 @@ on:
   #     - 'main'
   #     # for retrigger
   schedule:
-    - cron: "45 7 1 * *"  # “At 06:30 on day-of-month 1.”
+    - cron: "05 8 1 * *"  # “At 06:30 on day-of-month 1.”
 
 jobs:
   fetch:
