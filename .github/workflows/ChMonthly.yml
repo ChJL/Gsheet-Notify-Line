@@ -1,8 +1,12 @@
 name: Ch Monthly Send Expense
 
 on:
+  # push:
+  #   branches:
+  #     - 'main'
+  #     # for retrigger
   schedule:
-    - cron: "30 6 1 * *"  # “At 06:30 on day-of-month 1.”
+    - cron: "05 8 1 * *"  # “At 06:30 on day-of-month 1.”
 
 jobs:
   fetch:

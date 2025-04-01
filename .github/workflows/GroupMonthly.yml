@@ -1,8 +1,12 @@
 name: Group Monthly Send Expense
 
 on:
+  # push:
+  #   branches:
+  #     - 'main'
+  #     # for retrigger
   schedule:
-    - cron: "10 0 1 * *" # “At 01:10 on day-of-month 1.”
+    - cron: "05 8 1 * *" # “At 01:10 on day-of-month 1.”
 
 jobs:
   fetch:
