@@ -1,4 +1,4 @@
-name: Ch Monthly Send Expense
+name: Ch Weekly Send Expense
 
 on:
   # push:
