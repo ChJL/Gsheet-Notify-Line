@@ -1,4 +1,4 @@
-name: Monthly Expense Notification
+name: Monthly Expense Notification (expired)
 on: 
   push:
     # branches:

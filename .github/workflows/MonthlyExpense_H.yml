@@ -1,4 +1,4 @@
-name: Group Month Expense
+name: Group Month Expense (expired)
 on: 
   push:
     branches:

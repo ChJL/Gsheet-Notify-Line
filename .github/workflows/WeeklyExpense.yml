@@ -1,4 +1,4 @@
-name: Weekly Expense Notification
+name: Weekly Expense Notification (expired)
 on: 
   push:
     branches:
