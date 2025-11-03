@@ -1,6 +1,6 @@
 name: Monthly Expense Notification (expired)
 on: 
-  push:
+#  push:
     # branches:
     #   - 'main'
       # for re-trigger

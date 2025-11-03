@@ -1,7 +1,7 @@
 name: Group Month Expense (expired)
 on: 
-  push:
-    branches:
+#  push:
+#    branches:
       # - 'main'
       # for retrigger
   schedule:
