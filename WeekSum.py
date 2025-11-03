@@ -52,8 +52,9 @@ message_totxt = 'Last week: €' + sum_str +' from '+ \
 	start_date_str+' to '+ end_date_str
 txt_file.write(message_totxt)
 txt_file.close()
-
+'''
 # ===== To Draw plot =====
+# Temporary disable the plot drawing for Github Action run
 
 # Groupby Category & Sum the amount, Sorted it in decending way
 cate_df = df_b[['Amount','Category']].groupby(by=['Category'],as_index=False).sum()
@@ -91,3 +92,4 @@ plt.legend(bbox_to_anchor=(1.2, 0.4), loc="upper left",fontsize=14,
 plt.tight_layout()
 plt.savefig("figure/CategoryPlot.jpg", dpi=200)
 # plt.show()
+'''

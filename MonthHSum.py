@@ -61,8 +61,9 @@ message_totxt = '上個月從 ' +  start_date_str +"到" + end_date_str + ": NT$
 txt_file.write(message_totxt)
 txt_file.close()
 # print(message_totxt)
-
+'''
 # ===== To Draw plot =====
+# Temporary disable the plot drawing for Github Action run
 
 # Groupby Category & Sum the amount, Sorted it in decending way
 cate_df = df_b[['Amount','Category']].groupby(by=['Category'],as_index=False).sum()
@@ -101,3 +102,4 @@ plt.legend(bbox_to_anchor=(1.2, 0.4), loc="upper left",fontsize=14,
 plt.tight_layout()
 plt.savefig("figure/Cat_HMonthPlot.jpg", dpi=200)
 # plt.show()
+'''

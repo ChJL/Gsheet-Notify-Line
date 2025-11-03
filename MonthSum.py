@@ -69,6 +69,9 @@ fordaydf = interval_df[interval_df.Category != "Insurance"]
 fordaydf = fordaydf[fordaydf.Category != "Transportation"]
 fordaydf = fordaydf[fordaydf.Category != "Rental"]
 day_df = fordaydf[['Amount', 'T_Date']].groupby(by=['T_Date'], as_index=True).sum()
+'''
 # ===== To Draw plot =====
+# Temporary disable the plot drawing for Github Action run
 pie_plot(cate_df, start_date_str, end_date_str)
 line_plot(day_df, start_date, end_date)
+'''
