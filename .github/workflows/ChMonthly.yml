@@ -1,10 +1,9 @@
 name: Ch Monthly Send Expense
 
 on:
-  # push:
-  #   branches:
-  #     - 'main'
-  #     # for retrigger
+  push:
+     branches:
+      - 'main'
   schedule:
     - cron: "05 8 1 * *"  # “At 06:30 on day-of-month 1.”
 
