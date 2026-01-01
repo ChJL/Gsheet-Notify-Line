@@ -24,7 +24,7 @@ jobs:
           commands: | # list of commands, specified as a valid JSON string, set lower bound of row 
             [
               { "command": "getWorksheet", "args": { "worksheetTitle": "workingon" } },
-              { "command": "getData", "args": { "minCol": 1 , "minRow": 1600  } }
+              { "command": "getData", "args": { "minCol": 1 , "minRow": 2250  } }
             ]
         env:
           GSHEET_CLIENT_EMAIL: ${{ secrets.GSHEET_CLIENT_EMAIL }}
